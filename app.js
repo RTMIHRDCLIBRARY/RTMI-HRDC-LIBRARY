@@ -73,3 +73,14 @@ $("memberForm").onsubmit=async e=>{
 };
 $("cancelMemberEdit").onclick=()=>{$("memberForm").reset();selectedMemberId=null;$("memberEditor").classList.add("hidden");msg("memberEditMsg","")};
 init().catch(e=>msg("loginMsg",e.message,true));
+// Open registration panel
+$("showRegister").onclick=()=>{
+ $("login").classList.add("hidden");
+ $("registerPanel").classList.remove("hidden");
+};
+
+// Registration navigation
+$("backToLogin").onclick=()=>{
+ $("registerPanel").classList.add("hidden");
+ $("login").classList.remove("hidden");
+};
