@@ -116,5 +116,29 @@
 <div id="memberEditor" class="member-editor hidden"><h4 id="memberFormTitle">Edit member</h4><p>Account role: <strong id="memberRole"></strong> (change roles only through the administrator's approved process).</p>
 <form id="memberForm" class="formgrid">
 <div><label>Full name</label><input id="fullName" required></div><div><label>Member code</label><input id="memberCode"></div><div><label>Email</label><input id="memberEmail" type="email"></div><div><label>Phone</label><input id="memberPhone"></div><div><label>Program / course</label><input id="memberProgram" placeholder="BSc Nursing, Diploma Nursing, MATS, IHT…"></div><div><label>Department</label><input id="memberDepartment"></div><div><label>Designation</label><input id="memberDesignation"></div><div><label>Status</label><select id="memberStatus"><option value="Active">Active</option><option value="Inactive">Inactive</option></select></div><div><label>Joining date</label><input id="joiningDate" type="date"></div><div><label>Expiry date</label><input id="expiryDate" type="date"></div><div class="wide"><label>Address</label><textarea id="memberAddress"></textarea></div><div class="wide"><button type="submit">Save member details</button> <button type="button" id="cancelMemberEdit" class="secondary">Cancel</button> <span id="memberEditMsg"></span></div>
-</form></div></section>
+</form></div></section><section id="pendingApprovalsPanel" class="hidden">
+  <h2>Pending Registration Approvals</h2>
+  <p>Review new student, teacher and staff registration requests.</p>
+
+  <p id="approvalMsg"></p>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Email</th>
+          <th>Requested Role</th>
+          <th>Phone</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody id="pendingRows">
+        <tr>
+          <td colspan="5">Loading pending registrations...</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
 <section class="panel"><div class="catalogue"><h3>Book Catalogue</h3><input id="search" placeholder="Search title, author, ISBN or accession"></div><div class="tablewrap"><table><thead><tr><th>Accession</th><th>Title / Author</th><th>DDC</th><th>Category</th><th>PDF</th><th id="actionHead" class="hidden">Action</th></tr></thead><tbody id="rows"></tbody></table></div><p id="catalogueMsg"></p></section></section></main><footer>East Shahi Eidgah, TB Gate, Sylhet</footer><script type="module" src="app.js"></script></body></html>
