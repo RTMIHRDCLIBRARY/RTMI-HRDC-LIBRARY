@@ -10,8 +10,13 @@ async function init(){
  sb.auth.onAuthStateChange((_e,s)=>{if(s)setTimeout(()=>enter(s.user),0);else{$("login").classList.remove("hidden");$("app").classList.add("hidden");$("logout").classList.add("hidden")}});
 }
 async function enter(u){
- user=u;const {data,error}=await sb.from("profiles").select("full_name,role,member_code,program").eq("id",u.id).single();
- if(error||!data){msg("loginMsg","Profile not found. Ask the library administrator to check your profile.",true);return}
+ user=u;const {data,error}=await sb.from("profiles").select("full_name,role,member_code,program,account_status").eq("id",u.id).single();
+ if(error||!data){msg("loginMsg","Profile not found. Ask the library administrator to check your profile.",true);return} 
+ if(data.account_status!=="approved"){
+ await sb.auth.signOut();
+ msg("loginMsg","Your account is pending Admin approval or has been rejected. Please contact the Library Admin.",true);
+ return;
+}
  profile=data;$("login").classList.add("hidden");$("app").classList.remove("hidden");$("logout").classList.remove("hidden");
  $("who").textContent=(data.full_name||"Library user")+" • "+u.email;$("role").textContent=data.role||"member";
  $("staff").classList.toggle("hidden",!staff());$("actionHead").classList.toggle("hidden",!staff());
