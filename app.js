@@ -78,6 +78,57 @@ $("memberForm").onsubmit=async e=>{
 };
 $("cancelMemberEdit").onclick=()=>{$("memberForm").reset();selectedMemberId=null;$("memberEditor").classList.add("hidden");msg("memberEditMsg","")};
 init().catch(e=>msg("loginMsg",e.message,true));
+
+// Registration system
+$("registerForm").onsubmit=async e=>{
+ e.preventDefault();
+
+ const password=$("regPassword").value;
+ if(password!==$("regPassword2").value){
+  msg("registerMsg","Passwords do not match.",true);
+  return;
+ }
+
+ msg("registerMsg","Submitting registration...");
+
+ const metadata={
+  full_name:$("regName").value.trim(),
+  requested_role:$("regRole").value,
+  class_id:$("regClassId").value.trim(),
+  session:$("regSession").value.trim(),
+  phone:$("regPhone").value.trim(),
+  blood_group:$("regBlood").value,
+  course_name:$("regCourse").value.trim(),
+  college_name:$("regCollege").value.trim(),
+  department:$("regDepartment").value.trim(),
+  academic_year:$("regYear").value.trim(),
+  roll_number:$("regRoll").value.trim(),
+  registration_number:$("regRegistration").value.trim()
+ };
+
+ try {
+  const {data,error}=await sb.auth.signUp({
+   email:$("regEmail").value.trim(),
+   password,
+   options:{data:metadata}
+  });
+
+  if(error){
+   msg("registerMsg",error.message,true);
+   return;
+  }
+
+  $("registerForm").reset();
+
+  msg("registerMsg",data.session
+   ? "Registration submitted. Your account is pending Admin approval."
+   : "Registration created. Please check your email to confirm your address. Your account is pending Admin approval.");
+
+ } catch(error) {
+  msg("registerMsg",error.message,true);
+ }
+};
+
 // Open registration panel
 $("showRegister").onclick=()=>{
  $("login").classList.add("hidden");
