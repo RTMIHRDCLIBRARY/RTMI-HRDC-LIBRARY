@@ -76,7 +76,106 @@ $("memberForm").onsubmit=async e=>{
  if(error){msg("memberEditMsg",error.message,true);return}
  msg("memberEditMsg","Member details saved successfully.");await loadMembers();
 };
-$("cancelMemberEdit").onclick=()=>{$("memberForm").reset();selectedMemberId=null;$("memberEditor").classList.add("hidden");msg("memberEditMsg","")};
+$("cancelMemberEdit").onclick=()=>{$("memberForm").reset();selectedMemberId=null;$("memberEditor").classList.add("hidden");msg("memberEditMsg","")}; 
+
+async function loadPendingRegistrations(){
+ const {data,error}=await sb
+  .from("profiles")
+  .select("id,full_name,email,requested_role,phone,account_status")
+  .eq("account_status","pending")
+  .order("updated_at",{ascending:false});
+
+ if(error){
+  msg("approvalMsg",error.message,true);
+  return;
+ }
+
+ const body=$("pendingRows");
+ body.replaceChildren();
+
+ if(!data||data.length===0){
+  const tr=document.createElement("tr");
+  const td=document.createElement("td");
+  td.colSpan=5;
+  td.textContent="No pending registrations.";
+  tr.append(td);
+  body.append(tr);
+  msg("approvalMsg","No pending requests.");
+  return;
+ }
+
+ for(const m of data){
+  const tr=document.createElement("tr");
+
+  [m.full_name,m.email,m.requested_role,m.phone].forEach(value=>{
+   const td=document.createElement("td");
+   td.textContent=value||"—";
+   tr.append(td);
+  });
+
+  const td=document.createElement("td");
+
+  const approve=document.createElement("button");
+  approve.textContent="Approve";
+  approve.onclick=()=>approveMember(m.id,m.requested_role);
+
+  const reject=document.createElement("button");
+  reject.textContent="Reject";
+  reject.onclick=()=>rejectMember(m.id);
+
+  td.append(approve,reject);
+  tr.append(td);
+  body.append(tr);
+ }
+
+ msg("approvalMsg",data.length+" pending request(s) found.");
+}
+
+async function approveMember(id,requestedRole){
+ if(!staff())return;
+ if(!confirm("Approve this registration?"))return;
+
+ const allowedRoles=["student","teacher","staff"];
+ const finalRole=allowedRoles.includes(requestedRole)
+  ?requestedRole
+  :"student";
+
+ const {error}=await sb
+  .from("profiles")
+  .update({role:finalRole,account_status:"approved"})
+  .eq("id",id)
+  .eq("account_status","pending");
+
+ if(error){
+  msg("approvalMsg",error.message,true);
+  return;
+ }
+
+ msg("approvalMsg","Registration approved successfully.");
+ await loadPendingRegistrations();
+ await loadMembers();
+}
+
+async function rejectMember(id){
+ if(!staff())return;
+ if(!confirm("Reject this registration?"))return;
+
+ const {error}=await sb
+  .from("profiles")
+  .update({account_status:"rejected"})
+  .eq("id",id)
+  .eq("account_status","pending");
+
+ if(error){
+  msg("approvalMsg",error.message,true);
+  return;
+ }
+
+ msg("approvalMsg","Registration rejected.");
+ await loadPendingRegistrations();
+ await loadMembers();
+}
+
 init().catch(e=>msg("loginMsg",e.message,true));
 
 // Registration system
