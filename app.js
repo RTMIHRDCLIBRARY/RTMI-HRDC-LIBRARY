@@ -34,9 +34,55 @@ function render(){
  const filtered=books.filter(b=>[b.title,b.author,b.isbn,b.accession_no,b.category].some(v=>String(v||"").toLowerCase().includes(q)));
  if(!filtered.length){const tr=document.createElement("tr"),td=document.createElement("td");td.colSpan=6;td.textContent="No matching books found.";tr.append(td);body.append(tr);return}
  for(const b of filtered){const tr=document.createElement("tr");[b.accession_no,(b.title||"")+(b.author?"\n"+b.author:""),b.ddc_number,b.category].forEach((v,i)=>{const td=document.createElement("td");td.textContent=v||"—";if(i===1)td.style.whiteSpace="pre-line";tr.append(td)});
- const pdf=document.createElement("td");if(b.pdf_path){const a=document.createElement("a");a.href="#";a.textContent="Open PDF";a.onclick=async e=>{e.preventDefault();const {data,error}=await sb.storage.from("library-pdfs").createSignedUrl(b.pdf_path,300);if(error)msg("catalogueMsg",error.message,true);else window.open(data.signedUrl,"_blank","noopener,noreferrer")};pdf.append(a)}else pdf.textContent="Not uploaded";tr.append(pdf);
- if(staff()){const td=document.createElement("td"),btn=document.createElement("button");btn.textContent="Delete";btn.onclick=async()=>{if(!confirm("Delete this book record?"))return;const {error}=await sb.from("books").delete().eq("id",b.id);if(error)msg("catalogueMsg",error.message,true);else loadBooks()};td.append(btn);tr.append(td)}body.append(tr)}
+ 
+const pdf=document.createElement("td");
+
+if(b.pdf_path){
+ const read=document.createElement("button");
+ read.type="button";
+ read.textContent="Read Online";
+
+ read.onclick=async()=>{
+  const {data,error}=await sb.storage
+   .from("library-pdfs")
+   .createSignedUrl(b.pdf_path,3600);
+
+  if(error){
+   msg("catalogueMsg",error.message,true);
+  }else{
+   window.open(data.signedUrl,"_blank","noopener,noreferrer");
+  }
+ };
+
+ const download=document.createElement("button");
+ download.type="button";
+ download.textContent="Download PDF";
+
+ download.onclick=async()=>{
+  const {data,error}=await sb.storage
+   .from("library-pdfs")
+   .download(b.pdf_path);
+
+  if(error){
+   msg("catalogueMsg",error.message,true);
+   return;
+  }
+
+  const url=URL.createObjectURL(data);
+  const link=document.createElement("a");
+  link.href=url;
+  link.download=(b.title||"library-book")+".pdf";
+  link.click();
+  URL.revokeObjectURL(url);
+ };
+
+ pdf.append(read,download);
+}else{
+ pdf.textContent="Not uploaded";
 }
+
+tr.append(pdf);
+
 const memberColumns="id,full_name,member_code,role,email,phone,program,department,designation,address,status,joining_date,expiry_date";
 async function loadMembers(){
  msg("memberMsg","Loading members…");
