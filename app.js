@@ -20,7 +20,14 @@ async function enter(u){
  msg("loginMsg","Your account is pending Admin approval or has been rejected. Please contact the Library Admin.",true);
  return;
 }
- profile=data;$("login").classList.add("hidden");$("app").classList.remove("hidden");$("logout").classList.remove("hidden");
+profile=data;
+
+$("myFullName").value=data.full_name||"";
+$("myPhone").value=data.phone||"";
+$("myAddress").value=data.address||"";
+$("myBloodGroup").value=data.blood_group||"";
+
+$("login").classList.add("hidden");;$("app").classList.remove("hidden");$("logout").classList.remove("hidden");
  $("who").textContent=(data.full_name||"Library user")+" • "+u.email;$("role").textContent=data.role||"member";
  $("staff").classList.toggle("hidden",!staff());$("actionHead").classList.toggle("hidden",!staff());
  $("membersPanel").classList.toggle("hidden",!staff());
