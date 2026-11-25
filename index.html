@@ -106,7 +106,51 @@
   <p id="registerMsg"></p>
 </section>
 
-<section id="app" class="hidden"><h2>Library Dashboard</h2><p id="who"></p><div class="stats"><b>Catalogue records: <span id="count">0</span></b><b>Role: <span id="role"></span></b></div>
+<section id="app" class="hidden"><h2>Library Dashboard</h2><p id="who"></p><div class="stats"><b>Catalogue records: <span id="count">0</span></b><b>Role: <span id="role"></span></b></div> 
+  
+<section id="profilePanel" class="panel">
+  <h3>My Profile</h3>
+  <p>View and update your personal information.</p>
+
+  <form id="profileForm" class="formgrid">
+    <div>
+      <label>Full name</label>
+      <input id="myFullName" required maxlength="120">
+    </div>
+
+    <div>
+      <label>Phone number</label>
+      <input id="myPhone" type="tel">
+    </div>
+
+    <div>
+      <label>Blood group</label>
+      <select id="myBloodGroup">
+        <option value="">Select blood group</option>
+        <option>A+</option><option>A-</option>
+        <option>B+</option><option>B-</option>
+        <option>O+</option><option>O-</option>
+        <option>AB+</option><option>AB-</option>
+      </select>
+    </div>
+
+    <div class="wide">
+      <label>Address</label>
+      <textarea id="myAddress"></textarea>
+    </div>
+
+    <div class="wide">
+      <label>Profile photo</label>
+      <input id="myPhoto" type="file" accept="image/jpeg,image/png,image/webp">
+    </div>
+
+    <div class="wide">
+      <button type="submit">Save My Profile</button>
+      <p id="profileMsg"></p>
+    </div>
+  </form>
+</section>
+
 <section id="staff" class="panel hidden"><h3>Add a book (staff only)</h3><form id="bookForm" class="formgrid">
 <div><label>Accession number *</label><input id="accession" required></div><div><label>Book title *</label><input id="title" required></div><div><label>Author</label><input id="author"></div><div><label>ISBN</label><input id="isbn"></div><div><label>DDC number</label><input id="ddc"></div><div><label>Category / course</label><input id="category"></div><div><label>Publisher</label><input id="publisher"></div><div><label>Edition</label><input id="edition"></div><div><label>Total copies</label><input id="copies" type="number" min="1" value="1"></div><div><label>Shelf location</label><input id="shelf"></div><div class="wide"><label>Description</label><textarea id="description"></textarea></div><div class="wide"><label>PDF file (optional)</label><input id="pdf" type="file" accept="application/pdf"></div><div class="wide"><button type="submit">Save book</button><span id="bookMsg"></span></div></form></section>
 <section id="membersPanel" class="panel hidden"><h3>Member Management</h3><p>Manage existing student, teacher and staff profiles. To create a new login, first add the user in Supabase Authentication → Users → Add user. The profile trigger creates the profile; then edit it here.</p>
