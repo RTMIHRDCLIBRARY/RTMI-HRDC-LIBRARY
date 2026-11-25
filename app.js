@@ -21,6 +21,8 @@ async function enter(u){
  $("who").textContent=(data.full_name||"Library user")+" • "+u.email;$("role").textContent=data.role||"member";
  $("staff").classList.toggle("hidden",!staff());$("actionHead").classList.toggle("hidden",!staff());
  $("membersPanel").classList.toggle("hidden",!staff());
+ $("pendingApprovalsPanel").classList.toggle("hidden",!staff());
+if(staff())await loadPendingRegistrations();
  await loadBooks();if(staff())await loadMembers();
 }
 async function loadBooks(){
