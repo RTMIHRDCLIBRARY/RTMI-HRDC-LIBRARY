@@ -233,7 +233,71 @@ async function rejectMember(id){
  await loadPendingRegistrations();
  await loadMembers();
 }
+// Save My Profile
+$("profileForm").onsubmit=async e=>{
+ e.preventDefault();
 
+ const fullName=$("myFullName").value.trim();
+ const phone=$("myPhone").value.trim();
+ const address=$("myAddress").value.trim();
+ const bloodGroup=$("myBloodGroup").value;
+ const photo=$("myPhoto").files[0];
+
+ if(!fullName){
+  msg("profileMsg","Please enter your full name.",true);
+  return;
+ }
+
+ msg("profileMsg","Saving your profile...");
+
+ try{
+  let photoPath=profile.profile_photo_path||null;
+
+  if(photo){
+   if(!["image/jpeg","image/png","image/webp"].includes(photo.type)){
+    msg("profileMsg","Please select a JPG, PNG, or WEBP image.",true);
+    return;
+   }
+
+   if(photo.size>3*1024*1024){
+    msg("profileMsg","Photo must be smaller than 3 MB.",true);
+    return;
+   }
+
+   const safeName=photo.name.replace(/[^a-zA-Z0-9._-]/g,"_");
+   photoPath=user.id+"/"+Date.now()+"-"+safeName;
+
+   const {error:uploadError}=await sb.storage
+    .from("profile-photos")
+    .upload(photoPath,photo,{contentType:photo.type});
+
+   if(uploadError)throw uploadError;
+  }
+
+  const {error}=await sb.rpc("update_my_profile",{
+   p_full_name:fullName,
+   p_phone:phone,
+   p_address:address,
+   p_blood_group:bloodGroup,
+   p_profile_photo_path:photoPath
+  });
+
+  if(error)throw error;
+
+  profile.full_name=fullName;
+  profile.phone=phone;
+  profile.address=address;
+  profile.blood_group=bloodGroup;
+  profile.profile_photo_path=photoPath;
+
+  $("who").textContent=fullName+" • "+user.email;
+  $("myPhoto").value="";
+  msg("profileMsg","Profile updated successfully!");
+
+ }catch(error){
+  msg("profileMsg",error.message,true);
+ }
+};
 init().catch(e=>msg("loginMsg",e.message,true));
 
 // Registration system
