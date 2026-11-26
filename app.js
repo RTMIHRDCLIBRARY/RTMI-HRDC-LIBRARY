@@ -92,7 +92,34 @@ if(b.pdf_path){
 }
 
 tr.append(pdf);
+if(staff()){
+ const td=document.createElement("td");
+ const btn=document.createElement("button");
 
+ btn.textContent="Delete";
+
+ btn.onclick=async()=>{
+  if(!confirm("Delete this book record?"))return;
+
+  const {error}=await sb
+   .from("books")
+   .delete()
+   .eq("id",b.id);
+
+  if(error){
+   msg("catalogueMsg",error.message,true);
+  }else{
+   await loadBooks();
+  }
+ };
+
+ td.append(btn);
+ tr.append(td);
+}
+
+body.append(tr);
+}
+}
 const memberColumns="id,full_name,member_code,role,email,phone,program,department,designation,address,status,joining_date,expiry_date";
 async function loadMembers(){
  msg("memberMsg","Loading members…");
