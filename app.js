@@ -318,7 +318,7 @@ $("profileForm").onsubmit=async e=>{
   profile.blood_group=bloodGroup;
   profile.profile_photo_path=photoPath;
 
-  $("who").textContent=fullName+" • "+user.email;
+$("who").textContent=fullName+" • "+(user?.email||"");
   $("myPhoto").value="";
   msg("profileMsg","Profile updated successfully!");
 
