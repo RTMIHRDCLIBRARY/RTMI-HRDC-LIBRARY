@@ -298,8 +298,11 @@ $("profileForm").onsubmit=async e=>{
   msg("profileMsg",error.message,true);
  }
 };
-init().catch(e=>msg("loginMsg",e.message,true));
 
+$("backToLogin").onclick=()=>{
+ $("registerPanel").classList.add("hidden");
+ $("login").classList.remove("hidden");
+};
 // Registration system
 $("registerForm").onsubmit=async e=>{
  e.preventDefault();
@@ -361,3 +364,4 @@ $("backToLogin").onclick=()=>{
  $("registerPanel").classList.add("hidden");
  $("login").classList.remove("hidden");
 };
+init().catch(e=>msg("loginMsg",e.message,true));
