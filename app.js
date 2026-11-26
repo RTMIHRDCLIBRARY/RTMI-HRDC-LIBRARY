@@ -27,7 +27,19 @@ $("myFullName").value=data.full_name||"";
 $("myPhone").value=data.phone||"";
 $("myAddress").value=data.address||"";
 $("myBloodGroup").value=data.blood_group||"";
+const photoPreview=$("profilePhotoPreview");
+photoPreview.style.display="none";
 
+if(data.profile_photo_path){
+ const {data:photoData,error:photoError}=await sb.storage
+  .from("profile-photos")
+  .createSignedUrl(data.profile_photo_path,3600);
+
+ if(!photoError&&photoData?.signedUrl){
+  photoPreview.src=photoData.signedUrl;
+  photoPreview.style.display="block";
+ }
+}
 $("login").classList.add("hidden");;$("app").classList.remove("hidden");$("logout").classList.remove("hidden");
  $("who").textContent=(data.full_name||"Library user")+" • "+u.email;$("role").textContent=data.role||"member";
  $("staff").classList.toggle("hidden",!staff());$("actionHead").classList.toggle("hidden",!staff());
