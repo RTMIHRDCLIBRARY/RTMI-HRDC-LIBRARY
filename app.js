@@ -10,6 +10,7 @@ async function init(){
  sb.auth.onAuthStateChange((_e,s)=>{if(s)setTimeout(()=>enter(s.user),0);else{$("login").classList.remove("hidden");$("app").classList.add("hidden");$("logout").classList.add("hidden")}});
 }
 async function enter(u){
+  user=u;
  const {data,error}=await sb.from("profiles")
  .select("full_name,role,member_code,program,account_status,phone,address,blood_group,profile_photo_path")
  .eq("id",u.id)
