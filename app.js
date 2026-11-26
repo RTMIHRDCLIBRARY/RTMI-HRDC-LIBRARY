@@ -308,6 +308,7 @@ $("registerForm").onsubmit=async e=>{
  e.preventDefault();
 
  const password=$("regPassword").value;
+
  if(password!==$("regPassword2").value){
   msg("registerMsg","Passwords do not match.",true);
   return;
@@ -330,7 +331,7 @@ $("registerForm").onsubmit=async e=>{
   registration_number:$("regRegistration").value.trim()
  };
 
- try {
+ try{
   const {data,error}=await sb.auth.signUp({
    email:$("regEmail").value.trim(),
    password,
@@ -348,20 +349,19 @@ $("registerForm").onsubmit=async e=>{
    ? "Registration submitted. Your account is pending Admin approval."
    : "Registration created. Please check your email to confirm your address. Your account is pending Admin approval.");
 
- } catch(error) {
+ }catch(error){
   msg("registerMsg",error.message,true);
  }
 };
 
-// Open registration panel
 $("showRegister").onclick=()=>{
  $("login").classList.add("hidden");
  $("registerPanel").classList.remove("hidden");
 };
 
-// Registration navigation
 $("backToLogin").onclick=()=>{
  $("registerPanel").classList.add("hidden");
  $("login").classList.remove("hidden");
 };
+
 init().catch(e=>msg("loginMsg",e.message,true));
