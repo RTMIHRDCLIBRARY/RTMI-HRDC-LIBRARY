@@ -438,3 +438,7 @@ $("backToLogin").onclick=()=>{
 };
 
 init().catch(e=>msg("loginMsg",e.message,true));
+// Print Library ID Card
+$("printIdCard").onclick=()=>{
+ window.print();
+};
