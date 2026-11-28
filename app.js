@@ -34,8 +34,11 @@ $("idCardRole").textContent=data.role||"Member";
 $("idCardProgram").textContent=data.program||"Not specified";
 $("idCardSession").textContent=data.session||"Not specified";
 
-if(data.profile_photo_path && photoPreview.src){
- $("idCardPhoto").src=photoPreview.src;
+const cardPhoto=$("profilePhotoPreview");
+
+if(data.profile_photo_path && cardPhoto.src){
+ $("idCardPhoto").src=cardPhoto.src;
+ $("idCardPhoto").style.display="block";
 }else{
  $("idCardPhoto").style.display="none";
 }
