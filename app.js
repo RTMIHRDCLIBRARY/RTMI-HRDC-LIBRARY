@@ -33,7 +33,19 @@ $("idCardMemberCode").textContent=data.member_code||"Not assigned";
 $("idCardRole").textContent=data.role||"Member";
 $("idCardProgram").textContent=data.program||"Not specified";
 $("idCardSession").textContent=data.session||"Not specified";
+// Generate member QR code
+const qrBox=$("idCardQR");
+qrBox.replaceChildren();
 
+if(typeof window.QRCode==="function"){
+ new window.QRCode(qrBox,{
+  text:"RTMI-HRDC Library | Member ID: "+(data.member_code||"Not assigned"),
+  width:110,
+  height:110
+ });
+}else{
+ qrBox.textContent="QR code library not loaded.";
+}
 const cardPhoto=$("profilePhotoPreview");
 
 if(data.profile_photo_path && cardPhoto.src){
