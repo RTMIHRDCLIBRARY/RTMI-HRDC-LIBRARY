@@ -27,6 +27,18 @@ $("myFullName").value=data.full_name||"";
 $("myPhone").value=data.phone||"";
 $("myAddress").value=data.address||"";
 $("myBloodGroup").value=data.blood_group||"";
+ // Populate Library ID Card
+$("idCardName").textContent=data.full_name||"Member";
+$("idCardMemberCode").textContent=data.member_code||"Not assigned";
+$("idCardRole").textContent=data.role||"Member";
+$("idCardProgram").textContent=data.program||"Not specified";
+$("idCardSession").textContent=data.session||"Not specified";
+
+if(data.profile_photo_path && photoPreview.src){
+ $("idCardPhoto").src=photoPreview.src;
+}else{
+ $("idCardPhoto").style.display="none";
+}
 const photoPreview=$("profilePhotoPreview");
 photoPreview.style.display="none";
 
