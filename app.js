@@ -35,10 +35,16 @@ if(data.profile_photo_path){
   .from("profile-photos")
   .createSignedUrl(data.profile_photo_path,3600);
 
- if(!photoError&&photoData?.signedUrl){
-  photoPreview.src=photoData.signedUrl;
-  photoPreview.style.display="block";
- }
+ if(photoError){
+ console.error("PHOTO URL ERROR:",photoError);
+}else if(photoData?.signedUrl){
+ photoPreview.src=photoData.signedUrl;
+ photoPreview.style.display="block";
+
+ photoPreview.onerror=()=>{
+  console.error("PHOTO IMAGE LOAD ERROR:",photoPreview.src);
+ };
+}
 }
 $("login").classList.add("hidden");;$("app").classList.remove("hidden");$("logout").classList.remove("hidden");
  $("who").textContent=(data.full_name||"Library user")+" • "+u.email;$("role").textContent=data.role||"member";
